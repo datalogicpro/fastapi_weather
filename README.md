@@ -4,7 +4,7 @@
 
 A FastAPI app that returns current weather, a 7-day forecast, and past weather for US cities.
 
-**Live demo:** coming soon. The app is being moved to a new Render service.
+**Live demo:** [fastapi-weather-iu1o.onrender.com/docs](https://fastapi-weather-iu1o.onrender.com/docs)
 
 ## Features
 
