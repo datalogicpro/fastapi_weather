@@ -1,0 +1,59 @@
+[project]
+name = "fastapi-weather"
+version = "1.0.0"
+requires-python = ">=3.13"
+dependencies = [
+    "asgi-correlation-id>=5.0.1",
+    "fastapi[standard]>=0.143.0",
+    "httpx>=0.28.1",
+    "meteostat>=2.1.5",
+    "pydantic-settings>=2.15.0",
+    "python-json-logger>=4.2.0",
+    "requests>=2.34.2",
+    "sentry-sdk[fastapi]>=2.71.0",
+    "slowapi>=0.1.10",
+    "tenacity>=9.2.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "--cov --cov-report=term-missing"
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+source = ["."]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+fail_under = 100
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["pydantic.mypy"]
+check_untyped_defs = true
+disallow_untyped_defs = true
+warn_unused_ignores = true
+warn_return_any = true
+
+[[tool.mypy.overrides]]
+module = ["meteostat.*", "pandas.*", "slowapi.*"]
+ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.13.1",
+    "mypy>=2.4.0",
+    "pandas>=3.0.6",
+    "pip-audit>=2.10.1",
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+]
