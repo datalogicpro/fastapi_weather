@@ -1,37 +1,63 @@
-   repos:
-     - repo: https://github.com/pre-commit/pre-commit-hooks
-       rev: v6.0.0
-       hooks:
-         - id: trailing-whitespace
-         - id: end-of-file-fixer
-         - id: check-yaml
-         - id: check-toml
-         - id: check-merge-conflict
-         - id: check-added-large-files
+repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.13.0
+    hooks:
+      - id: uv-lock
 
-     - repo: https://github.com/astral-sh/uv-pre-commit
-       rev: 0.13.0
-       hooks:
-         - id: uv-lock
+  # Every check runs from the project's .venv through uv, so it uses the
+  # versions in uv.lock, and Windows Smart App Control doesn't block it
+  - repo: local
+    hooks:
+      - id: trailing-whitespace
+        name: trim trailing whitespace
+        entry: uv run python -m pre_commit_hooks.trailing_whitespace_fixer
+        language: system
+        types: [text]
 
-     # Ruff and mypy run from the project's .venv, so they use the versions in uv.lock
-     - repo: local
-       hooks:
-         - id: ruff-check
-           name: ruff check
-           entry: uv run ruff check --fix
-           language: system
-           types: [python]
+      - id: end-of-file-fixer
+        name: fix end of files
+        entry: uv run python -m pre_commit_hooks.end_of_file_fixer
+        language: system
+        types: [text]
 
-         - id: ruff-format
-           name: ruff format
-           entry: uv run ruff format
-           language: system
-           types: [python]
+      - id: check-yaml
+        name: check yaml
+        entry: uv run python -m pre_commit_hooks.check_yaml
+        language: system
+        types: [yaml]
 
-         - id: mypy
-           name: mypy
-           entry: uv run python -m mypy .
-           language: system
-           types: [python]
-           pass_filenames: false
+      - id: check-toml
+        name: check toml
+        entry: uv run python -m pre_commit_hooks.check_toml
+        language: system
+        types: [toml]
+
+      - id: check-merge-conflict
+        name: check for merge conflicts
+        entry: uv run python -m pre_commit_hooks.check_merge_conflict
+        language: system
+        types: [text]
+
+      - id: check-added-large-files
+        name: check for added large files
+        entry: uv run python -m pre_commit_hooks.check_added_large_files
+        language: system
+
+      - id: ruff-check
+        name: ruff check
+        entry: uv run ruff check --fix
+        language: system
+        types: [python]
+
+      - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
+        language: system
+        types: [python]
+
+      - id: mypy
+        name: mypy
+        entry: uv run python -m mypy .
+        language: system
+        types: [python]
+        pass_filenames: false
